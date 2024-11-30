@@ -1,6 +1,12 @@
 <template>
   <div id="joystick_container" ref="joyStickContainer">
     <div class="joystick_box" ref="joyStickBox"></div>
+    <button v-if="hasResetButton" type="button" @click="resetJoyStick">
+      리셋버튼
+    </button>
+    <button v-if="joyStickDir" type="button" @click="changeJoyStickDir">
+      {{ joyStickDir }}
+    </button>
   </div>
 </template>
 <script>
@@ -8,7 +14,12 @@ import nipplejs from "nipplejs";
 
 export default {
   name: "JoyStick",
-  emits: ["handleJoyStickReturnValue", "handleJoyStickEndMethod"],
+  emits: [
+    "handleJoyStickReturnValue",
+    "handleJoyStickEndMethod",
+    "handleResetJoyStickData",
+    "handleChangeJoyStickDir",
+  ],
   props: {
     joyStickCustomOption: {
       type: Object,
@@ -20,6 +31,15 @@ export default {
     },
     isJoyStickTouchActive: {
       type: Boolean,
+      require: false,
+    },
+    hasResetButton: {
+      type: Boolean,
+      require: false,
+      default: false,
+    },
+    joyStickDir: {
+      type: String,
       require: false,
     },
   },
@@ -52,6 +72,12 @@ export default {
       this.joystick.on("start", this.handleStart);
       this.joystick.on("move", this.handleMove);
       this.joystick.on("end", this.handleEnd);
+    },
+    resetJoyStick() {
+      this.$emit("handleResetJoyStickData");
+    },
+    changeJoyStickDir() {
+      this.$emit("handleChangeJoyStickDir");
     },
   },
   mounted() {

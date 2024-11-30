@@ -1,6 +1,9 @@
 <template>
   <div id="app">
     <div id="joyStickWrap">
+      <p>{{ joyStickDir }}</p>
+      <p>PITCH : {{ handyGimbalPitch }}</p>
+      <p>YAW : {{ handyGimbalYaw }}</p>
       <RangeSelector
         :min="0.1"
         :max="0.9"
@@ -9,16 +12,48 @@
         @handleChangeInputValue="handleChangeInputValue"
       />
       <JoyStick
+        v-if="joyStickDir === 'all'"
+        :key="'all'"
+        :hasResetButton="true"
+        :joyStickDir="joyStickDir"
         :joyStickCustomOption="joyStickCustomOption"
         :joyStickReturnValue="joyStickReturnValue"
         :isJoyStickTouchActive="isJoyStickTouchActive"
         @handleJoyStickReturnValue="handleJoyStickReturnValue"
         @handleJoyStickEndMethod="handleJoyStickEndMethod"
         @handleJoyStickStartMethod="handleJoyStickStartMethod"
+        @handleResetJoyStickData="handleResetJoyStickData"
+        @handleChangeJoyStickDir="handleChangeJoyStickDir"
+      />
+      <JoyStick
+        v-else-if="joyStickDir === 'pitch'"
+        :key="'pitch'"
+        :hasResetButton="true"
+        :joyStickDir="joyStickDir"
+        :joyStickCustomOption="joyStickCustomOption2"
+        :joyStickReturnValue="joyStickReturnValue"
+        :isJoyStickTouchActive="isJoyStickTouchActive"
+        @handleJoyStickReturnValue="handleJoyStickReturnValue"
+        @handleJoyStickEndMethod="handleJoyStickEndMethod"
+        @handleJoyStickStartMethod="handleJoyStickStartMethod"
+        @handleResetJoyStickData="handleResetJoyStickData"
+        @handleChangeJoyStickDir="handleChangeJoyStickDir"
+      />
+      <JoyStick
+        v-else-if="joyStickDir === 'yaw'"
+        :key="'yaw'"
+        :hasResetButton="true"
+        :joyStickDir="joyStickDir"
+        :joyStickCustomOption="joyStickCustomOption3"
+        :joyStickReturnValue="joyStickReturnValue"
+        :isJoyStickTouchActive="isJoyStickTouchActive"
+        @handleJoyStickReturnValue="handleJoyStickReturnValue"
+        @handleJoyStickEndMethod="handleJoyStickEndMethod"
+        @handleJoyStickStartMethod="handleJoyStickStartMethod"
+        @handleResetJoyStickData="handleResetJoyStickData"
+        @handleChangeJoyStickDir="handleChangeJoyStickDir"
       />
     </div>
-    <p>PITCH : {{ handyGimbalPitch }}</p>
-    <p>YAW : {{ handyGimbalYaw }}</p>
   </div>
 </template>
 
@@ -57,7 +92,28 @@ export default {
         lockY: false,
         color: "red",
       },
+      joyStickCustomOption2: {
+        mode: "static", // 'static' 또는 'dynamic'
+        position: { left: "50%", top: "50%" }, // 초기 위치
+        restOpacity: 1,
+        follow: false,
+        size: 150,
+        lockX: false,
+        lockY: true,
+        color: "blue",
+      },
+      joyStickCustomOption3: {
+        mode: "static", // 'static' 또는 'dynamic'
+        position: { left: "50%", top: "50%" }, // 초기 위치
+        restOpacity: 1,
+        follow: false,
+        size: 150,
+        lockX: true,
+        lockY: false,
+        color: "pink",
+      },
       joyStickSensitivity: 0.75,
+      joyStickDir: "all",
     };
   },
   methods: {
@@ -200,6 +256,35 @@ export default {
       //   "openAlert",
       //   this.$t("droneAlert.pleaseSetDroneTypeAndId")
       // );
+    },
+    /**
+     * 조이스틱 리셋 버튼 동작
+     */
+    handleResetJoyStickData() {
+      // Gimbal 값을 초기화
+      this.handyGimbalYaw = 0; // 정면으로 Yaw 설정
+      this.handyGimbalPitch = 0; // 정면으로 Pitch 설정
+
+      // 초기화 값을 publish
+      // this.droneControl[this.moduleTypeIndex].sendHandyGimbalDegree(
+      //   this.handyGimbalYaw,
+      //   this.handyGimbalPitch
+      // );
+    },
+    /**
+     * 조이스틱 방향 변경
+     */
+    handleChangeJoyStickDir() {
+      if (this.joyStickDir === "all") {
+        this.joyStickDir = "yaw";
+      } else if (this.joyStickDir === "yaw") {
+        this.joyStickDir = "pitch";
+      } else {
+        this.joyStickDir = "all";
+      }
+
+      console.log("this.joyStickDir");
+      console.log(this.joyStickDir);
     },
   },
 };
