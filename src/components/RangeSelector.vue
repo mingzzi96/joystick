@@ -111,7 +111,6 @@ export default {
     changeInputRangeValue(event) {
       if (this.checkMinMaxValue()) {
         this.rangeValue = Number(event.target.value);
-        console.log(this.rangeValue);
         this.$emit("handleChangeRangeBarValue");
         this.$emit("handleChangeInputValue", this.rangeValue);
       }
@@ -122,7 +121,6 @@ export default {
     changeInputNumberValue() {
       if (this.checkMinMaxValue()) {
         this.rangeValue = Number(event.target.value);
-        console.log(this.rangeValue);
         this.$emit("handleChangeInputNumberValue");
         this.$emit("handleChangeInputValue", this.rangeValue);
       }
