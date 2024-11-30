@@ -7,7 +7,7 @@
       :id="id"
       :min="min"
       :max="max"
-      :value="rangeValue"
+      :v-model="rangeValue"
       :step="step"
       @input="changeInputRangeValue"
     />
@@ -25,7 +25,7 @@
           type="number"
           :name="name"
           :id="id"
-          :value="rangeValue"
+          :v-model="rangeValue"
           :min="min"
           :max="max"
           @input="changeInputNumberValue"
