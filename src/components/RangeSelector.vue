@@ -20,6 +20,7 @@
         &#45;
       </button>
       <div class="input_box">
+        <div v-if="isValueVisible">{{ rangeValue }}</div>
         <input
           v-if="isValueEditInputVisible"
           type="number"
@@ -100,7 +101,7 @@ export default {
     return {
       // changeNumberValue: 0,
       // changeRangeValue: 0,
-      rangeValue: 0,
+      rangeValue: this.min,
     };
   },
   methods: {
@@ -108,10 +109,9 @@ export default {
      * range를 움직여서 value 셋팅하는 경우의 처리
      */
     changeInputRangeValue(event) {
-      this.rangeValue = Number(event.target.value);
-      console.log(this.rangeValue);
       if (this.checkMinMaxValue()) {
-        this.rangeValue = Number(this.changeRangeValue);
+        this.rangeValue = Number(event.target.value);
+        console.log(this.rangeValue);
         this.$emit("handleChangeRangeBarValue");
         this.$emit("handleChangeInputValue", this.rangeValue);
       }
@@ -120,10 +120,9 @@ export default {
      * 숫자를 직접 셋팅해서 value 셋팅하는 경우의 처리
      */
     changeInputNumberValue() {
-      this.rangeValue = Number(event.target.value);
-      console.log(this.rangeValue);
       if (this.checkMinMaxValue()) {
-        this.rangeValue = Number(this.changeNumberValue);
+        this.rangeValue = Number(event.target.value);
+        console.log(this.rangeValue);
         this.$emit("handleChangeInputNumberValue");
         this.$emit("handleChangeInputValue", this.rangeValue);
       }
